@@ -35,7 +35,7 @@ namespace QuantityMeasurementApp.Model
       }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (ReferenceEquals(this, obj))
         return true;
@@ -51,6 +51,44 @@ namespace QuantityMeasurementApp.Model
     public override int GetHashCode()
     {
       return ToFeet().GetHashCode();
+    }
+
+    public static double Convert(double value, LengthUnit sourceUnit, LengthUnit targetUnit)
+    {
+      if (double.IsNaN(value) || double.IsInfinity(value))
+        throw new ArgumentException("Invalid numeric value");
+
+      if (!Enum.IsDefined(typeof(LengthUnit), sourceUnit) ||
+          !Enum.IsDefined(typeof(LengthUnit), targetUnit))
+        throw new ArgumentException("Invalid unit");
+
+      Quantity temp = new Quantity(value, sourceUnit);
+      double valueInFeet = temp.ToFeet();
+
+      double valueInTargetUnit;
+      switch (targetUnit)
+      {
+        case LengthUnit.INCH:
+          valueInTargetUnit = valueInFeet * 12.0;
+          break;
+
+        case LengthUnit.FEET:
+          valueInTargetUnit = valueInFeet;
+          break;
+
+        case LengthUnit.YARD:
+          valueInTargetUnit = valueInFeet / 3.0;
+          break;
+
+        case LengthUnit.CENTIMETER:
+          valueInTargetUnit = (valueInFeet * 12.0) / 0.393701;
+          break;
+
+        default:
+          throw new ArgumentException("Invalid unit");
+      }
+
+      return valueInTargetUnit;
     }
   }
 }

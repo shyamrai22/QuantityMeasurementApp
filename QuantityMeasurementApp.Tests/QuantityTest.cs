@@ -57,5 +57,13 @@ namespace QuantityMeasurementApp.Tests
 
       Assert.IsTrue(q1.Equals(q1));
     }
+
+    [TestMethod]
+    public void GivenFeetToInches_ShouldReturn12()
+    {
+      double result = Quantity.Convert(1.0, LengthUnit.FEET, LengthUnit.INCH);
+
+      Assert.AreEqual(12.0, result, 0.0001);
+    }
   }
 }
