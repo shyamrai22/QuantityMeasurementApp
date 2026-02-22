@@ -37,7 +37,7 @@ namespace QuantityMeasurementApp.Tests
     public void GivenDifferentValues_ShouldReturnFalse()
     {
       var q1 = new Quantity(1.0, LengthUnit.FEET);
-      var q2 = new Quantity(2.0, LengthUnit.FEET);
+      var q2 = new Quantity(3.0, LengthUnit.YARD);
 
       Assert.IsFalse(q1.Equals(q2));
     }

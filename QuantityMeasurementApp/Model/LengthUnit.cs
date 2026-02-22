@@ -3,6 +3,8 @@ namespace QuantityMeasurementApp.Model
   public enum LengthUnit
   {
     FEET,
-    INCH
+    INCH,
+    YARD,
+    CENTIMETER
   }
 }

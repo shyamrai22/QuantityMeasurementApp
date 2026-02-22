@@ -24,6 +24,12 @@ namespace QuantityMeasurementApp.Model
         case LengthUnit.INCH:
           return value / 12.0;
 
+        case LengthUnit.YARD:
+          return value * 3.0; // 1 yard = 3 feet
+
+        case LengthUnit.CENTIMETER:
+          return (value * 0.393701) / 12.0; // cm -> inch -> feet
+
         default:
           throw new ArgumentException("Invalid choice");
       }
