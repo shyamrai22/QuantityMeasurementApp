@@ -65,5 +65,17 @@ namespace QuantityMeasurementApp.Tests
 
       Assert.AreEqual(12.0, result, 0.0001);
     }
+
+    [TestMethod]
+    public void GivenFeetPlusInch_ShouldReturnFeet()
+    {
+      var q1 = new Quantity(1.0, LengthUnit.FEET);
+      var q2 = new Quantity(12.0, LengthUnit.INCH);
+
+      var result = q1.Add(q2);
+
+      Assert.AreEqual(2.0, result.Value, 0.0001);
+      Assert.AreEqual(LengthUnit.FEET, result.Unit);
+    }
   }
 }

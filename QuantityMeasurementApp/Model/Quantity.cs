@@ -35,6 +35,25 @@ namespace QuantityMeasurementApp.Model
       }
     }
 
+    public Quantity Add(Quantity other)
+    {
+      if (other == null)
+        throw new ArgumentException("Other quantity cannot be null");
+
+      if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
+          double.IsNaN(other.value) || double.IsInfinity(other.value))
+        throw new ArgumentException("Invalid numeric value");
+
+      double thisInFeet = this.ToFeet();
+      double otherInFeet = other.ToFeet();
+
+      double sumInFeet = thisInFeet + otherInFeet;
+
+      double result = Convert(sumInFeet, LengthUnit.FEET, this.Unit);
+
+      return new Quantity(result, this.Unit);
+    }
+
     public override bool Equals(object? obj)
     {
       if (ReferenceEquals(this, obj))
