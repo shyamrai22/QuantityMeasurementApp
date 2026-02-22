@@ -1,0 +1,15 @@
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.dll
+*.exe
+
+.vs/
+.vscode/
+
+appsettings.Development.json
+
+node_modules/
