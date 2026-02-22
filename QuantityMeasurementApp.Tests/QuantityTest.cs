@@ -77,5 +77,39 @@ namespace QuantityMeasurementApp.Tests
       Assert.AreEqual(2.0, result.Value, 0.0001);
       Assert.AreEqual(LengthUnit.FEET, result.Unit);
     }
+
+    [TestMethod]
+    public void GivenFeetAndInch_TargetFeet_ShouldReturnFeet()
+    {
+      var q1 = new Quantity(1.0, LengthUnit.FEET);
+      var q2 = new Quantity(12.0, LengthUnit.INCH);
+
+      var result = q1.Add(q2, LengthUnit.FEET);
+
+      Assert.AreEqual(2.0, result.Value, 0.0001);
+      Assert.AreEqual(LengthUnit.FEET, result.Unit);
+    }
+
+    [TestMethod]
+    public void GivenFeetAndInch_TargetInch_ShouldReturnInch()
+    {
+      var q1 = new Quantity(1.0, LengthUnit.FEET);
+      var q2 = new Quantity(12.0, LengthUnit.INCH);
+
+      var result = q1.Add(q2, LengthUnit.INCH);
+
+      Assert.AreEqual(24.0, result.Value, 0.0001);
+    }
+
+    [TestMethod]
+    public void GivenFeetAndInch_TargetYard_ShouldReturnYard()
+    {
+      var q1 = new Quantity(1.0, LengthUnit.FEET);
+      var q2 = new Quantity(12.0, LengthUnit.INCH);
+
+      var result = q1.Add(q2, LengthUnit.YARD);
+
+      Assert.AreEqual(0.6667, result.Value, 0.0001);
+    }
   }
 }

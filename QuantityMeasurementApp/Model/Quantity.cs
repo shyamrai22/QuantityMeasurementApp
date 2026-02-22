@@ -35,6 +35,11 @@ namespace QuantityMeasurementApp.Model
       }
     }
 
+    private double AddInFeet(Quantity other)
+    {
+      return this.ToFeet() + other.ToFeet();
+    }
+
     public Quantity Add(Quantity other)
     {
       if (other == null)
@@ -44,14 +49,30 @@ namespace QuantityMeasurementApp.Model
           double.IsNaN(other.value) || double.IsInfinity(other.value))
         throw new ArgumentException("Invalid numeric value");
 
-      double thisInFeet = this.ToFeet();
-      double otherInFeet = other.ToFeet();
-
-      double sumInFeet = thisInFeet + otherInFeet;
+      double sumInFeet = AddInFeet(other);
 
       double result = Convert(sumInFeet, LengthUnit.FEET, this.Unit);
 
       return new Quantity(result, this.Unit);
+    }
+
+    public Quantity Add(Quantity other, LengthUnit targetUnit)
+    {
+      if (other == null)
+        throw new ArgumentException("Other quantity cannot be null");
+
+      if (!Enum.IsDefined(typeof(LengthUnit), targetUnit))
+        throw new ArgumentException("Invalid target unit");
+
+      if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
+          double.IsNaN(other.value) || double.IsInfinity(other.value))
+        throw new ArgumentException("Invalid numeric value");
+
+      double sumInFeet = AddInFeet(other);
+
+      double result = Convert(sumInFeet, LengthUnit.FEET, targetUnit);
+
+      return new Quantity(result, targetUnit);
     }
 
     public override bool Equals(object? obj)
