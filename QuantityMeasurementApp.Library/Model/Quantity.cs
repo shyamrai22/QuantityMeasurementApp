@@ -1,96 +1,88 @@
-using System;
-
 namespace QuantityMeasurementApp.Library.Model
 {
-  public class Quantity
+  public class Quantity<T> where T : Enum
   {
     private readonly double value;
-    private readonly LengthUnit unit;
+    private readonly T unit;
 
-    public Quantity(double value, LengthUnit unit)
+    public double Value => value;
+    public T Unit => unit;
+
+    public Quantity(double value, T unit)
     {
+      if (!Enum.IsDefined(typeof(T), unit))
+        throw new ArgumentException("Invalid unit");
+
+      if (double.IsNaN(value) || double.IsInfinity(value))
+        throw new ArgumentException("Invalid value");
+
       this.value = value;
       this.unit = unit;
     }
 
-    public double Value => value;
-    public LengthUnit Unit => unit;
-
-    private double AddInFeet(Quantity other)
+    public Quantity<T> ConvertTo(T targetUnit)
     {
-      return unit.ToBaseUnit(value) + other.unit.ToBaseUnit(other.value);
+      double baseValue = ConvertToBase(value, unit);
+      double result = ConvertFromBase(baseValue, targetUnit);
+
+      return new Quantity<T>(result, targetUnit);
     }
 
-    // UC6
-    public Quantity Add(Quantity other)
+    public Quantity<T> Add(Quantity<T> other)
     {
-      if (other == null)
-        throw new ArgumentException("Other quantity cannot be null");
-
-      if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
-          double.IsNaN(other.value) || double.IsInfinity(other.value))
-        throw new ArgumentException("Invalid numeric value");
-
-      double sumInFeet = AddInFeet(other);
-
-      double result = this.unit.FromBaseUnit(sumInFeet);
-
-      return new Quantity(result, this.unit);
+      return Add(other, unit);
     }
 
-    // UC7
-    public Quantity Add(Quantity other, LengthUnit targetUnit)
+    public Quantity<T> Add(Quantity<T> other, T targetUnit)
     {
-      if (other == null)
-        throw new ArgumentException("Other quantity cannot be null");
+      double base1 = ConvertToBase(value, unit);
+      double base2 = ConvertToBase(other.value, other.unit);
 
-      if (!Enum.IsDefined(typeof(LengthUnit), targetUnit))
-        throw new ArgumentException("Invalid target unit");
+      double sum = base1 + base2;
 
-      if (double.IsNaN(this.value) || double.IsInfinity(this.value) ||
-          double.IsNaN(other.value) || double.IsInfinity(other.value))
-        throw new ArgumentException("Invalid numeric value");
+      double result = ConvertFromBase(sum, targetUnit);
 
-      double sumInFeet = AddInFeet(other);
-
-      double result = targetUnit.FromBaseUnit(sumInFeet);
-
-      return new Quantity(result, targetUnit);
+      return new Quantity<T>(result, targetUnit);
     }
 
-    // UC1
-    public override bool Equals(object? obj)
+    private static double ConvertToBase(double value, T unit)
     {
-      if (ReferenceEquals(this, obj))
-        return true;
+      if (unit is LengthUnit l)
+        return l.ToBaseUnit(value);
 
+      if (unit is WeightUnit w)
+        return w.ToBaseUnit(value);
+
+      throw new ArgumentException("Unsupported unit");
+    }
+
+    private static double ConvertFromBase(double value, T unit)
+    {
+      if (unit is LengthUnit l)
+        return l.FromBaseUnit(value);
+
+      if (unit is WeightUnit w)
+        return w.FromBaseUnit(value);
+
+      throw new ArgumentException("Unsupported unit");
+    }
+
+    public override bool Equals(object obj)
+    {
       if (obj == null || GetType() != obj.GetType())
         return false;
 
-      Quantity other = (Quantity)obj;
+      Quantity<T> other = (Quantity<T>)obj;
 
-      return unit.ToBaseUnit(value)
-          .CompareTo(other.unit.ToBaseUnit(other.value)) == 0;
+      double base1 = ConvertToBase(value, unit);
+      double base2 = ConvertToBase(other.value, other.unit);
+
+      return Math.Abs(base1 - base2) < 0.0001;
     }
 
     public override int GetHashCode()
     {
-      return unit.ToBaseUnit(value).GetHashCode();
-    }
-
-    // UC5
-    public static double Convert(double value, LengthUnit sourceUnit, LengthUnit targetUnit)
-    {
-      if (double.IsNaN(value) || double.IsInfinity(value))
-        throw new ArgumentException("Invalid numeric value");
-
-      if (!Enum.IsDefined(typeof(LengthUnit), sourceUnit) ||
-          !Enum.IsDefined(typeof(LengthUnit), targetUnit))
-        throw new ArgumentException("Invalid unit");
-
-      double baseValue = sourceUnit.ToBaseUnit(value);
-
-      return targetUnit.FromBaseUnit(baseValue);
+      return ConvertToBase(value, unit).GetHashCode();
     }
   }
 }
