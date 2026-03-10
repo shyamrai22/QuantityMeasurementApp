@@ -5,33 +5,15 @@ class Program
 {
   static void Main()
   {
-    Console.WriteLine("1. Add Lengths");
-    Console.WriteLine("2. Convert Length");
-    Console.WriteLine("3. Exit");
+    var v1 = new Quantity<VolumeUnit>(1.0, VolumeUnit.LITRE);
+    var v2 = new Quantity<VolumeUnit>(1000.0, VolumeUnit.MILLILITRE);
 
-    int choice = int.Parse(Console.ReadLine() ?? "0");
+    Console.WriteLine($"Equality: {v1.Equals(v2)}");
 
-    switch (choice)
-    {
-      case 1:
-        var q1 = new Quantity<LengthUnit>(1.0, LengthUnit.FEET);
-        var q2 = new Quantity<LengthUnit>(12.0, LengthUnit.INCH);
+    var converted = v1.ConvertTo(VolumeUnit.MILLILITRE);
+    Console.WriteLine($"Conversion: {converted.Value} {converted.Unit}");
 
-        var result = q1.Add(q2);
-
-        Console.WriteLine($"Result: {result.Value} {result.Unit}");
-        break;
-
-      case 2:
-        var length = new Quantity<LengthUnit>(1.0, LengthUnit.FEET);
-
-        var converted = length.ConvertTo(LengthUnit.INCH);
-
-        Console.WriteLine($"Converted: {converted.Value} {converted.Unit}");
-        break;
-
-      case 3:
-        return;
-    }
+    var added = v1.Add(v2);
+    Console.WriteLine($"Addition: {added.Value} {added.Unit}");
   }
 }

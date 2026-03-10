@@ -45,24 +45,30 @@ namespace QuantityMeasurementApp.Library.Model
       return new Quantity<T>(result, targetUnit);
     }
 
-    private static double ConvertToBase(double value, T unit)
+    private double ConvertToBase(double value, T unit)
     {
-      if (unit is LengthUnit l)
-        return l.ToBaseUnit(value);
+      if (unit is LengthUnit length)
+        return LengthUnitExtensions.ToBaseUnit(length, value);
 
-      if (unit is WeightUnit w)
-        return w.ToBaseUnit(value);
+      if (unit is WeightUnit weight)
+        return WeightUnitExtensions.ToBaseUnit(weight, value);
+
+      if (unit is VolumeUnit volume)
+        return VolumeUnitExtensions.ToBaseUnit(volume, value);
 
       throw new ArgumentException("Unsupported unit");
     }
 
-    private static double ConvertFromBase(double value, T unit)
+    private double ConvertFromBase(double baseValue, T unit)
     {
-      if (unit is LengthUnit l)
-        return l.FromBaseUnit(value);
+      if (unit is LengthUnit length)
+        return LengthUnitExtensions.FromBaseUnit(length, baseValue);
 
-      if (unit is WeightUnit w)
-        return w.FromBaseUnit(value);
+      if (unit is WeightUnit weight)
+        return WeightUnitExtensions.FromBaseUnit(weight, baseValue);
+
+      if (unit is VolumeUnit volume)
+        return VolumeUnitExtensions.FromBaseUnit(volume, baseValue);
 
       throw new ArgumentException("Unsupported unit");
     }
