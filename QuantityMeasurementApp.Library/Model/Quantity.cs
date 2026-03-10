@@ -55,6 +55,9 @@ namespace QuantityMeasurementApp.Library.Model
       double base1 = ConvertToBase(value, unit);
       double base2 = ConvertToBase(other.value, other.unit);
 
+      if (unit is TemperatureUnit)
+        throw new NotSupportedException("Temperature does not support arithmetic operations");
+
       switch (operation)
       {
         case ArithmeticOperation.ADD:
@@ -96,6 +99,9 @@ namespace QuantityMeasurementApp.Library.Model
       if (unit is VolumeUnit volume)
         return VolumeUnitExtensions.ToBaseUnit(volume, value);
 
+      if (unit is TemperatureUnit temperature)
+        return TemperatureUnitExtensions.ToBaseUnit(temperature, value);
+
       throw new ArgumentException("Unsupported unit");
     }
 
@@ -109,6 +115,9 @@ namespace QuantityMeasurementApp.Library.Model
 
       if (unit is VolumeUnit volume)
         return VolumeUnitExtensions.FromBaseUnit(volume, baseValue);
+
+      if (unit is TemperatureUnit temperature)
+        return TemperatureUnitExtensions.ToBaseUnit(temperature, value);
 
       throw new ArgumentException("Unsupported unit");
     }

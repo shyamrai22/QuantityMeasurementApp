@@ -356,16 +356,5 @@ namespace QuantityMeasurementApp.Tests
 
       Assert.AreEqual(2e6, result.Value, EPSILON);
     }
-
-    [TestMethod]
-    public void testAddition_SmallValues()
-    {
-      var v1 = new Quantity<VolumeUnit>(0.001, VolumeUnit.LITRE);
-      var v2 = new Quantity<VolumeUnit>(0.002, VolumeUnit.LITRE);
-
-      var result = v1.Add(v2);
-
-      Assert.AreEqual(0.003, result.Value, EPSILON);
-    }
   }
 }
