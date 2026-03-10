@@ -6,6 +6,7 @@ namespace QuantityMeasurementApp.Library.Model
     private readonly T unit;
 
     public double Value => value;
+
     public T Unit => unit;
 
     public Quantity(double value, T unit)
@@ -73,6 +74,43 @@ namespace QuantityMeasurementApp.Library.Model
       throw new ArgumentException("Unsupported unit");
     }
 
+    public Quantity<T> Subtract(Quantity<T> other)
+    {
+      return Subtract(other, Unit);
+    }
+
+    public Quantity<T> Subtract(Quantity<T> other, T targetUnit)
+    {
+      if (other == null)
+        throw new ArgumentException("Quantity cannot be null");
+
+      if (targetUnit == null)
+        throw new ArgumentException("Target unit cannot be null");
+
+      double baseValue1 = ConvertToBase(Value, Unit);
+      double baseValue2 = ConvertToBase(other.Value, other.Unit);
+
+      double resultBase = baseValue1 - baseValue2;
+
+      double result = ConvertFromBase(resultBase, targetUnit);
+
+      return new Quantity<T>(Math.Round(result, 2), targetUnit);
+    }
+
+    public double Divide(Quantity<T> other)
+    {
+      if (other == null)
+        throw new ArgumentException("Quantity cannot be null");
+
+      double baseValue1 = ConvertToBase(Value, Unit);
+      double baseValue2 = ConvertToBase(other.Value, other.Unit);
+
+      if (baseValue2 == 0)
+        throw new ArithmeticException("Division by zero");
+
+      return baseValue1 / baseValue2;
+    }
+
     public override bool Equals(object obj)
     {
       if (obj == null || GetType() != obj.GetType())
@@ -90,5 +128,6 @@ namespace QuantityMeasurementApp.Library.Model
     {
       return ConvertToBase(value, unit).GetHashCode();
     }
+
   }
 }

@@ -5,15 +5,13 @@ class Program
 {
   static void Main()
   {
-    var v1 = new Quantity<VolumeUnit>(1.0, VolumeUnit.LITRE);
-    var v2 = new Quantity<VolumeUnit>(1000.0, VolumeUnit.MILLILITRE);
+    var length1 = new Quantity<LengthUnit>(10, LengthUnit.FEET);
+    var length2 = new Quantity<LengthUnit>(6, LengthUnit.INCH);
 
-    Console.WriteLine($"Equality: {v1.Equals(v2)}");
+    var subtraction = length1.Subtract(length2);
+    Console.WriteLine($"Subtraction: {subtraction.Value} {subtraction.Unit}");
 
-    var converted = v1.ConvertTo(VolumeUnit.MILLILITRE);
-    Console.WriteLine($"Conversion: {converted.Value} {converted.Unit}");
-
-    var added = v1.Add(v2);
-    Console.WriteLine($"Addition: {added.Value} {added.Unit}");
+    var division = length1.Divide(new Quantity<LengthUnit>(2, LengthUnit.FEET));
+    Console.WriteLine($"Division: {division}");
   }
 }
