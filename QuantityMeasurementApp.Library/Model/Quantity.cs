@@ -1,4 +1,6 @@
-namespace QuantityMeasurementApp.Model
+using System;
+
+namespace QuantityMeasurementApp.Library.Model
 {
   public class Quantity
   {
@@ -14,32 +16,12 @@ namespace QuantityMeasurementApp.Model
     public double Value => value;
     public LengthUnit Unit => unit;
 
-    private double ToFeet()
-    {
-      switch (unit)
-      {
-        case LengthUnit.FEET:
-          return value;
-
-        case LengthUnit.INCH:
-          return value / 12.0;
-
-        case LengthUnit.YARD:
-          return value * 3.0; // 1 yard = 3 feet
-
-        case LengthUnit.CENTIMETER:
-          return (value * 0.393701) / 12.0; // cm -> inch -> feet
-
-        default:
-          throw new ArgumentException("Invalid choice");
-      }
-    }
-
     private double AddInFeet(Quantity other)
     {
-      return this.ToFeet() + other.ToFeet();
+      return unit.ToBaseUnit(value) + other.unit.ToBaseUnit(other.value);
     }
 
+    // UC6
     public Quantity Add(Quantity other)
     {
       if (other == null)
@@ -51,11 +33,12 @@ namespace QuantityMeasurementApp.Model
 
       double sumInFeet = AddInFeet(other);
 
-      double result = Convert(sumInFeet, LengthUnit.FEET, this.Unit);
+      double result = this.unit.FromBaseUnit(sumInFeet);
 
-      return new Quantity(result, this.Unit);
+      return new Quantity(result, this.unit);
     }
 
+    // UC7
     public Quantity Add(Quantity other, LengthUnit targetUnit)
     {
       if (other == null)
@@ -70,11 +53,12 @@ namespace QuantityMeasurementApp.Model
 
       double sumInFeet = AddInFeet(other);
 
-      double result = Convert(sumInFeet, LengthUnit.FEET, targetUnit);
+      double result = targetUnit.FromBaseUnit(sumInFeet);
 
       return new Quantity(result, targetUnit);
     }
 
+    // UC1
     public override bool Equals(object? obj)
     {
       if (ReferenceEquals(this, obj))
@@ -85,14 +69,16 @@ namespace QuantityMeasurementApp.Model
 
       Quantity other = (Quantity)obj;
 
-      return this.ToFeet().CompareTo(other.ToFeet()) == 0;
+      return unit.ToBaseUnit(value)
+          .CompareTo(other.unit.ToBaseUnit(other.value)) == 0;
     }
 
     public override int GetHashCode()
     {
-      return ToFeet().GetHashCode();
+      return unit.ToBaseUnit(value).GetHashCode();
     }
 
+    // UC5
     public static double Convert(double value, LengthUnit sourceUnit, LengthUnit targetUnit)
     {
       if (double.IsNaN(value) || double.IsInfinity(value))
@@ -102,33 +88,9 @@ namespace QuantityMeasurementApp.Model
           !Enum.IsDefined(typeof(LengthUnit), targetUnit))
         throw new ArgumentException("Invalid unit");
 
-      Quantity temp = new Quantity(value, sourceUnit);
-      double valueInFeet = temp.ToFeet();
+      double baseValue = sourceUnit.ToBaseUnit(value);
 
-      double valueInTargetUnit;
-      switch (targetUnit)
-      {
-        case LengthUnit.INCH:
-          valueInTargetUnit = valueInFeet * 12.0;
-          break;
-
-        case LengthUnit.FEET:
-          valueInTargetUnit = valueInFeet;
-          break;
-
-        case LengthUnit.YARD:
-          valueInTargetUnit = valueInFeet / 3.0;
-          break;
-
-        case LengthUnit.CENTIMETER:
-          valueInTargetUnit = (valueInFeet * 12.0) / 0.393701;
-          break;
-
-        default:
-          throw new ArgumentException("Invalid unit");
-      }
-
-      return valueInTargetUnit;
+      return targetUnit.FromBaseUnit(baseValue);
     }
   }
 }

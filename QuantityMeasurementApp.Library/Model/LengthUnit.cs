@@ -1,4 +1,4 @@
-namespace QuantityMeasurementApp.Model
+namespace QuantityMeasurementApp.Library.Model
 {
   public enum LengthUnit
   {
