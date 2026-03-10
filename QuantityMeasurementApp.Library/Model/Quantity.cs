@@ -6,8 +6,14 @@ namespace QuantityMeasurementApp.Library.Model
     private readonly T unit;
 
     public double Value => value;
-
     public T Unit => unit;
+
+    private enum ArithmeticOperation
+    {
+      ADD,
+      SUBTRACT,
+      DIVIDE
+    }
 
     public Quantity(double value, T unit)
     {
@@ -21,27 +27,60 @@ namespace QuantityMeasurementApp.Library.Model
       this.unit = unit;
     }
 
-    public Quantity<T> ConvertTo(T targetUnit)
-    {
-      double baseValue = ConvertToBase(value, unit);
-      double result = ConvertFromBase(baseValue, targetUnit);
+    /* =========================
+       CENTRALIZED VALIDATION
+    ========================= */
 
-      return new Quantity<T>(result, targetUnit);
+    private void ValidateArithmeticOperands(Quantity<T> other, T targetUnit, bool targetUnitRequired)
+    {
+      if (other == null)
+        throw new ArgumentException("Operand cannot be null");
+
+      if (!double.IsFinite(this.Value) || !double.IsFinite(other.Value))
+        throw new ArgumentException("Values must be finite");
+
+      if (this.Unit.GetType() != other.Unit.GetType())
+        throw new ArgumentException("Measurement categories must match");
+
+      if (targetUnitRequired && targetUnit == null)
+        throw new ArgumentException("Target unit cannot be null");
     }
 
-    public Quantity<T> Add(Quantity<T> other)
-    {
-      return Add(other, unit);
-    }
+    /* =========================
+       CENTRALIZED ARITHMETIC
+    ========================= */
 
-    public Quantity<T> Add(Quantity<T> other, T targetUnit)
+    private double PerformBaseArithmetic(Quantity<T> other, ArithmeticOperation operation)
     {
       double base1 = ConvertToBase(value, unit);
       double base2 = ConvertToBase(other.value, other.unit);
 
-      double sum = base1 + base2;
+      switch (operation)
+      {
+        case ArithmeticOperation.ADD:
+          return base1 + base2;
 
-      double result = ConvertFromBase(sum, targetUnit);
+        case ArithmeticOperation.SUBTRACT:
+          return base1 - base2;
+
+        case ArithmeticOperation.DIVIDE:
+          if (base2 == 0)
+            throw new ArithmeticException("Division by zero");
+          return base1 / base2;
+
+        default:
+          throw new ArgumentException("Unsupported arithmetic operation");
+      }
+    }
+
+    /* =========================
+       CONVERSION
+    ========================= */
+
+    public Quantity<T> ConvertTo(T targetUnit)
+    {
+      double baseValue = ConvertToBase(value, unit);
+      double result = ConvertFromBase(baseValue, targetUnit);
 
       return new Quantity<T>(result, targetUnit);
     }
@@ -74,42 +113,60 @@ namespace QuantityMeasurementApp.Library.Model
       throw new ArgumentException("Unsupported unit");
     }
 
-    public Quantity<T> Subtract(Quantity<T> other)
+    /* =========================
+       ADD
+    ========================= */
+
+    public Quantity<T> Add(Quantity<T> other)
     {
-      return Subtract(other, Unit);
+      return Add(other, unit);
     }
 
-    public Quantity<T> Subtract(Quantity<T> other, T targetUnit)
+    public Quantity<T> Add(Quantity<T> other, T targetUnit)
     {
-      if (other == null)
-        throw new ArgumentException("Quantity cannot be null");
+      ValidateArithmeticOperands(other, targetUnit, true);
 
-      if (targetUnit == null)
-        throw new ArgumentException("Target unit cannot be null");
+      double baseResult = PerformBaseArithmetic(other, ArithmeticOperation.ADD);
 
-      double baseValue1 = ConvertToBase(Value, Unit);
-      double baseValue2 = ConvertToBase(other.Value, other.Unit);
-
-      double resultBase = baseValue1 - baseValue2;
-
-      double result = ConvertFromBase(resultBase, targetUnit);
+      double result = ConvertFromBase(baseResult, targetUnit);
 
       return new Quantity<T>(Math.Round(result, 2), targetUnit);
     }
 
+    /* =========================
+       SUBTRACT
+    ========================= */
+
+    public Quantity<T> Subtract(Quantity<T> other)
+    {
+      return Subtract(other, unit);
+    }
+
+    public Quantity<T> Subtract(Quantity<T> other, T targetUnit)
+    {
+      ValidateArithmeticOperands(other, targetUnit, true);
+
+      double baseResult = PerformBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
+
+      double result = ConvertFromBase(baseResult, targetUnit);
+
+      return new Quantity<T>(Math.Round(result, 2), targetUnit);
+    }
+
+    /* =========================
+       DIVIDE
+    ========================= */
+
     public double Divide(Quantity<T> other)
     {
-      if (other == null)
-        throw new ArgumentException("Quantity cannot be null");
+      ValidateArithmeticOperands(other, default, false);
 
-      double baseValue1 = ConvertToBase(Value, Unit);
-      double baseValue2 = ConvertToBase(other.Value, other.Unit);
-
-      if (baseValue2 == 0)
-        throw new ArithmeticException("Division by zero");
-
-      return baseValue1 / baseValue2;
+      return PerformBaseArithmetic(other, ArithmeticOperation.DIVIDE);
     }
+
+    /* =========================
+       EQUALITY
+    ========================= */
 
     public override bool Equals(object obj)
     {
@@ -128,6 +185,5 @@ namespace QuantityMeasurementApp.Library.Model
     {
       return ConvertToBase(value, unit).GetHashCode();
     }
-
   }
 }
