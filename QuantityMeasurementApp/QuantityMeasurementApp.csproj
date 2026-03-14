@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuantityMeasurementApp.Library\QuantityMeasurementApp.Library.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementApp.Controller\QuantityMeasurementApp.Controller.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementApp.Service\QuantityMeasurementApp.Service.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementApp.Repository\QuantityMeasurementApp.Repository.csproj" />
+    <ProjectReference Include="..\QuantityMeasurementApp.Model\QuantityMeasurementApp.Model.csproj" />
   </ItemGroup>
 
 </Project>
