@@ -1,4 +1,4 @@
-﻿using QuantityMeasurementApp.Model.DTO;
+using QuantityMeasurementApp.Model.DTO;
 using QuantityMeasurementApp.Service;
 
 namespace QuantityMeasurementApp.Controller
@@ -25,7 +25,12 @@ namespace QuantityMeasurementApp.Controller
         Console.WriteLine("6. Exit");
 
         Console.Write("Enter choice: ");
-        int choice = int.Parse(Console.ReadLine());
+
+        if (!int.TryParse(Console.ReadLine(), out int choice))
+        {
+          Console.WriteLine("Invalid choice");
+          continue;
+        }
 
         switch (choice)
         {
@@ -50,7 +55,6 @@ namespace QuantityMeasurementApp.Controller
             break;
 
           case 6:
-            Console.WriteLine("Exiting...");
             return;
 
           default:
@@ -62,52 +66,52 @@ namespace QuantityMeasurementApp.Controller
 
     private void CompareMenu()
     {
-      var q1 = ReadQuantity("first");
-      var q2 = ReadQuantity("second");
+      var first = ReadQuantity("first");
+      var second = ReadQuantity("second");
 
-      bool result = service.Compare(q1, q2);
+      bool result = service.Compare(first, second);
 
-      Console.WriteLine($"Comparison Result: {result}");
+      Console.WriteLine($"Result: {result}");
     }
 
     private void ConvertMenu()
     {
-      var q = ReadQuantity("source");
+      var quantity = ReadQuantity("source");
 
       Console.Write("Enter target unit: ");
       string targetUnit = Console.ReadLine();
 
-      var result = service.Convert(q, targetUnit);
+      var result = service.Convert(quantity, targetUnit);
 
       Console.WriteLine($"Converted Result: {result.Value} {result.Unit}");
     }
 
     private void AddMenu()
     {
-      var q1 = ReadQuantity("first");
-      var q2 = ReadQuantity("second");
+      var first = ReadQuantity("first");
+      var second = ReadQuantity("second");
 
-      var result = service.Add(q1, q2);
+      var result = service.Add(first, second);
 
       Console.WriteLine($"Addition Result: {result.Value} {result.Unit}");
     }
 
     private void SubtractMenu()
     {
-      var q1 = ReadQuantity("first");
-      var q2 = ReadQuantity("second");
+      var first = ReadQuantity("first");
+      var second = ReadQuantity("second");
 
-      var result = service.Subtract(q1, q2);
+      var result = service.Subtract(first, second);
 
       Console.WriteLine($"Subtraction Result: {result.Value} {result.Unit}");
     }
 
     private void DivideMenu()
     {
-      var q1 = ReadQuantity("first");
-      var q2 = ReadQuantity("second");
+      var first = ReadQuantity("first");
+      var second = ReadQuantity("second");
 
-      double result = service.Divide(q1, q2);
+      double result = service.Divide(first, second);
 
       Console.WriteLine($"Division Result: {result}");
     }

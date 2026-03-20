@@ -1,6 +1,6 @@
 namespace QuantityMeasurementApp.Controller
 {
-  interface IQuantityMeasurementController
+  public interface IQuantityMeasurementController
   {
     void Start();
   }
