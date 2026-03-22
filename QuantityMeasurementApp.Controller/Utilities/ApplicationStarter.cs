@@ -9,62 +9,42 @@ namespace QuantityMeasurementApp.Controller
   {
     public void StartApplication()
     {
-      Console.WriteLine("Select Storage Option:");
-      Console.WriteLine("1. Cache (JSON)");
-      Console.WriteLine("2. Database (SQL Server)");
-      Console.Write("Enter choice: ");
+      Console.WriteLine("Starting Quantity Measurement Application...");
 
-      if (!int.TryParse(Console.ReadLine(), out int choice))
-      {
-        Console.WriteLine("Invalid input");
-        return;
-      }
+      var cacheRepo = QuantityMeasurementCacheRepository.GetInstance();
+      var dbRepo = CreateDatabaseRepository();
 
-      IQuantityMeasurementRepository repository =
-          CreateRepository(choice);
+      // Optional: Sync cache → DB at startup
+      SyncCacheToDatabase(cacheRepo, dbRepo);
 
-      var service = new QuantityMeasurementServiceImpl(repository);
+      // Always use DB for writes, cache for reads
+      var service = new QuantityMeasurementServiceImpl(
+          dbRepo,
+          cacheRepo
+      );
 
       var controller = new QuantityMeasurementController(service);
 
       controller.Start();
     }
 
-    private IQuantityMeasurementRepository CreateRepository(int choice)
+    private IQuantityMeasurementRepository CreateDatabaseRepository()
     {
-      var cacheRepo = QuantityMeasurementCacheRepository.GetInstance();
+      var configuration = new ConfigurationBuilder()
+          .SetBasePath(Directory.GetCurrentDirectory())
+          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+          .Build();
 
-      switch (choice)
-      {
-        case 1:
-          Console.WriteLine("Using Cache Repository (JSON)");
-          return cacheRepo;
+      string connectionString =
+          configuration.GetConnectionString("DefaultConnection");
 
-        case 2:
-          Console.WriteLine("Using Database Repository (SQL Server)");
+      Console.WriteLine("Connected to SQL Server Database");
 
-          var configuration = new ConfigurationBuilder()
-              .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-              .Build();
-
-          string connectionString =
-              configuration.GetConnectionString("DefaultConnection");
-
-          var dbRepo = new QuantityMeasurementDatabaseRepository(connectionString);
-
-          //  Sync cache → DB before using DB
-          SyncCacheToDatabase(cacheRepo, dbRepo);
-
-          return dbRepo;
-
-        default:
-          throw new ArgumentException("Invalid choice");
-      }
+      return new QuantityMeasurementDatabaseRepository(connectionString);
     }
 
     private void SyncCacheToDatabase(
-        IQuantityMeasurementRepository cacheRepo,
+        QuantityMeasurementCacheRepository cacheRepo,
         IQuantityMeasurementRepository dbRepo)
     {
       var cacheData = cacheRepo.GetAll();
@@ -75,7 +55,7 @@ namespace QuantityMeasurementApp.Controller
         return;
       }
 
-      Console.WriteLine($"Syncing {cacheData.Count} records to database...");
+      Console.WriteLine($"Syncing {cacheData.Count} cached records to database...");
 
       foreach (var record in cacheData)
       {
@@ -84,7 +64,7 @@ namespace QuantityMeasurementApp.Controller
 
       cacheRepo.DeleteAll();
 
-      Console.WriteLine("Sync completed. Cache cleared.");
+      Console.WriteLine("Cache synced to DB and cleared.");
     }
   }
 }

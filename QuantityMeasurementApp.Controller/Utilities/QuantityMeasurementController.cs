@@ -22,7 +22,8 @@ namespace QuantityMeasurementApp.Controller
         Console.WriteLine("3. Add Quantities");
         Console.WriteLine("4. Subtract Quantities");
         Console.WriteLine("5. Divide Quantities");
-        Console.WriteLine("6. Exit");
+        Console.WriteLine("6. View All Records"); // NEW
+        Console.WriteLine("7. Exit");
 
         Console.Write("Enter choice: ");
 
@@ -32,34 +33,45 @@ namespace QuantityMeasurementApp.Controller
           continue;
         }
 
-        switch (choice)
+        try // GLOBAL TRY-CATCH
         {
-          case 1:
-            CompareMenu();
-            break;
+          switch (choice)
+          {
+            case 1:
+              CompareMenu();
+              break;
 
-          case 2:
-            ConvertMenu();
-            break;
+            case 2:
+              ConvertMenu();
+              break;
 
-          case 3:
-            AddMenu();
-            break;
+            case 3:
+              AddMenu();
+              break;
 
-          case 4:
-            SubtractMenu();
-            break;
+            case 4:
+              SubtractMenu();
+              break;
 
-          case 5:
-            DivideMenu();
-            break;
+            case 5:
+              DivideMenu();
+              break;
 
-          case 6:
-            return;
+            case 6:
+              ViewAllMenu(); // NEW
+              break;
 
-          default:
-            Console.WriteLine("Invalid choice");
-            break;
+            case 7:
+              return;
+
+            default:
+              Console.WriteLine("Invalid choice");
+              break;
+          }
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine($"Error: {ex.Message}");
         }
       }
     }
@@ -114,6 +126,21 @@ namespace QuantityMeasurementApp.Controller
       double result = service.Divide(first, second);
 
       Console.WriteLine($"Division Result: {result}");
+    }
+
+    // NEW FEATURE (IMPORTANT)
+    private void ViewAllMenu()
+    {
+      var data = service.GetAllMeasurements();
+
+      Console.WriteLine("\n==== Stored Records ====");
+
+      foreach (var item in data)
+      {
+        Console.WriteLine(
+          $"{item.Operation} | {item.Operand1} | {item.Operand2} | {item.Result} | {item.MeasurementType} | Error: {item.HasError} | {item.ErrorMessage}"
+        );
+      }
     }
 
     private QuantityDTO ReadQuantity(string label)

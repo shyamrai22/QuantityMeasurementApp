@@ -1,1 +1,182 @@
-[]
+[
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 FEET",
+    "Operand2": "24 INCH",
+    "Result": "True",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372392Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 FEET",
+    "Operand2": "",
+    "Result": "396 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372495Z"
+  },
+  {
+    "Operation": "SUBTRACT",
+    "Operand1": "33 INCH",
+    "Operand2": "2 FEET",
+    "Result": "9 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372547Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "Distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-20T06:25:03.7372611Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 FEET",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "Distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-20T06:25:03.7372677Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 FEET",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372708Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "1 feet",
+    "Operand2": "12 feet",
+    "Result": "False",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372759Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "False",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372781Z"
+  },
+  {
+    "Operation": "SUBTRACT",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "1 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372802Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "24 inch",
+    "Result": "True",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372826Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372855Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-20T06:25:03.7372878Z"
+  },
+  {
+    "Operation": "ADD",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "3 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372899Z"
+  },
+  {
+    "Operation": "ADD",
+    "Operand1": "2 feet",
+    "Operand2": "3 inch",
+    "Result": "2.25 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372922Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372952Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "22 inch",
+    "Operand2": "",
+    "Result": "1.8333333333333333 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7372973Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "22 inch",
+    "Result": "",
+    "MeasurementType": "distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-20T06:25:03.7373042Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 feet",
+    "Operand2": "",
+    "Result": "396 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-20T06:25:03.7373071Z"
+  }
+]

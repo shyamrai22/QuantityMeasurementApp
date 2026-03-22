@@ -64,5 +64,10 @@ namespace QuantityMeasurementApp.Repository
         storage = data;
     }
 
+    public void ClearCache()
+    {
+      storage.Clear();
+    }
+
   }
 }

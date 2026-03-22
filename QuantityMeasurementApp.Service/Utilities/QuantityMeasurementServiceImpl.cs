@@ -7,11 +7,56 @@ namespace QuantityMeasurementApp.Service
 {
   public class QuantityMeasurementServiceImpl : IQuantityMeasurementService
   {
-    private readonly IQuantityMeasurementRepository repository;
+    private readonly IQuantityMeasurementRepository databaseRepository;
+    private readonly QuantityMeasurementCacheRepository cacheRepository;
 
-    public QuantityMeasurementServiceImpl(IQuantityMeasurementRepository repository)
+    public QuantityMeasurementServiceImpl(
+        IQuantityMeasurementRepository databaseRepository,
+        QuantityMeasurementCacheRepository cacheRepository)
     {
-      this.repository = repository;
+      this.databaseRepository = databaseRepository;
+      this.cacheRepository = cacheRepository;
+    }
+
+    // Helper Methods
+    public List<QuantityMeasurementEntity> GetAllMeasurements()
+    {
+      var cacheData = cacheRepository.GetAll();
+
+      if (cacheData.Count > 0)
+      {
+        Console.WriteLine("⚡ Serving from CACHE");
+        return cacheData;
+      }
+
+      Console.WriteLine("📦 Fetching from DATABASE");
+
+      var dbData = databaseRepository.GetAll();
+
+      foreach (var item in dbData)
+      {
+        cacheRepository.Save(item);
+      }
+
+      return dbData;
+    }
+
+    private void SaveSuccess(string operation, string op1, string op2, string result, string type)
+    {
+      databaseRepository.Save(new QuantityMeasurementEntity(
+          operation, op1, op2, result, type
+      ));
+
+      cacheRepository.ClearCache();
+    }
+
+    private void SaveError(string operation, string op1, string op2, string type, string error)
+    {
+      databaseRepository.Save(new QuantityMeasurementEntity(
+          operation, op1, op2, null, type, true, error
+      ));
+
+      cacheRepository.ClearCache();
     }
 
     public bool Compare(QuantityDTO firstQuantityDto, QuantityDTO secondQuantityDto)
@@ -35,27 +80,25 @@ namespace QuantityMeasurementApp.Service
           _ => throw new ArgumentException("Unsupported measurement type")
         };
 
-        repository.Save(new QuantityMeasurementEntity(
-          "COMPARE",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          operationResult.ToString(),
-          firstQuantityDto.MeasurementType
-        ));
+        SaveSuccess(
+            "COMPARE",
+            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+            operationResult.ToString(),
+            firstQuantityDto.MeasurementType
+        );
 
         return operationResult;
       }
       catch (Exception ex)
       {
-        repository.Save(new QuantityMeasurementEntity(
-          "COMPARE",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          null,
-          firstQuantityDto.MeasurementType,
-          true,
-          ex.Message
-        ));
+        SaveError(
+            "COMPARE",
+            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+            firstQuantityDto?.MeasurementType,
+            ex.Message
+        );
         throw;
       }
     }
@@ -83,29 +126,31 @@ namespace QuantityMeasurementApp.Service
 
         dynamic resultQuantity = conversionResult;
 
-        var resultDto = new QuantityDTO(resultQuantity.Value, resultQuantity.Unit.ToString(), sourceQuantityDto.MeasurementType);
+        var resultDto = new QuantityDTO(
+            resultQuantity.Value,
+            resultQuantity.Unit.ToString(),
+            sourceQuantityDto.MeasurementType
+        );
 
-        repository.Save(new QuantityMeasurementEntity(
-          "CONVERT",
-          $"{sourceQuantityDto.Value} {sourceQuantityDto.Unit}",
-          null,
-          $"{resultDto.Value} {resultDto.Unit}",
-          sourceQuantityDto.MeasurementType
-        ));
+        SaveSuccess(
+            "CONVERT",
+            $"{sourceQuantityDto.Value} {sourceQuantityDto.Unit}",
+            null,
+            $"{resultDto.Value} {resultDto.Unit}",
+            sourceQuantityDto.MeasurementType
+        );
 
         return resultDto;
       }
       catch (Exception ex)
       {
-        repository.Save(new QuantityMeasurementEntity(
-          "CONVERT",
-          $"{sourceQuantityDto.Value} {sourceQuantityDto.Unit}",
-          null,
-          null,
-          sourceQuantityDto.MeasurementType,
-          true,
-          ex.Message
-        ));
+        SaveError(
+            "CONVERT",
+            $"{sourceQuantityDto?.Value} {sourceQuantityDto?.Unit}",
+            null,
+            sourceQuantityDto?.MeasurementType,
+            ex.Message
+        );
         throw;
       }
     }
@@ -132,29 +177,31 @@ namespace QuantityMeasurementApp.Service
 
         dynamic resultQuantity = additionResult;
 
-        var resultDto = new QuantityDTO(resultQuantity.Value, resultQuantity.Unit.ToString(), firstQuantityDto.MeasurementType);
+        var resultDto = new QuantityDTO(
+            resultQuantity.Value,
+            resultQuantity.Unit.ToString(),
+            firstQuantityDto.MeasurementType
+        );
 
-        repository.Save(new QuantityMeasurementEntity(
-          "ADD",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          $"{resultDto.Value} {resultDto.Unit}",
-          firstQuantityDto.MeasurementType
-        ));
+        SaveSuccess(
+            "ADD",
+            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+            $"{resultDto.Value} {resultDto.Unit}",
+            firstQuantityDto.MeasurementType
+        );
 
         return resultDto;
       }
       catch (Exception ex)
       {
-        repository.Save(new QuantityMeasurementEntity(
-          "ADD",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          null,
-          firstQuantityDto.MeasurementType,
-          true,
-          ex.Message
-        ));
+        SaveError(
+            "ADD",
+            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+            firstQuantityDto?.MeasurementType,
+            ex.Message
+        );
         throw;
       }
     }
@@ -181,29 +228,31 @@ namespace QuantityMeasurementApp.Service
 
         dynamic resultQuantity = subtractionResult;
 
-        var resultDto = new QuantityDTO(resultQuantity.Value, resultQuantity.Unit.ToString(), firstQuantityDto.MeasurementType);
+        var resultDto = new QuantityDTO(
+            resultQuantity.Value,
+            resultQuantity.Unit.ToString(),
+            firstQuantityDto.MeasurementType
+        );
 
-        repository.Save(new QuantityMeasurementEntity(
-          "SUBTRACT",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          $"{resultDto.Value} {resultDto.Unit}",
-          firstQuantityDto.MeasurementType
-        ));
+        SaveSuccess(
+            "SUBTRACT",
+            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+            $"{resultDto.Value} {resultDto.Unit}",
+            firstQuantityDto.MeasurementType
+        );
 
         return resultDto;
       }
       catch (Exception ex)
       {
-        repository.Save(new QuantityMeasurementEntity(
-          "SUBTRACT",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          null,
-          firstQuantityDto.MeasurementType,
-          true,
-          ex.Message
-        ));
+        SaveError(
+            "SUBTRACT",
+            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+            firstQuantityDto?.MeasurementType,
+            ex.Message
+        );
         throw;
       }
     }
@@ -228,27 +277,25 @@ namespace QuantityMeasurementApp.Service
           _ => throw new ArgumentException("Unsupported measurement type")
         };
 
-        repository.Save(new QuantityMeasurementEntity(
-          "DIVIDE",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          result.ToString(),
-          firstQuantityDto.MeasurementType
-        ));
+        SaveSuccess(
+            "DIVIDE",
+            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+            result.ToString(),
+            firstQuantityDto.MeasurementType
+        );
 
         return result;
       }
       catch (Exception ex)
       {
-        repository.Save(new QuantityMeasurementEntity(
-          "DIVIDE",
-          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-          null,
-          firstQuantityDto.MeasurementType,
-          true,
-          ex.Message
-        ));
+        SaveError(
+            "DIVIDE",
+            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+            firstQuantityDto?.MeasurementType,
+            ex.Message
+        );
         throw;
       }
     }

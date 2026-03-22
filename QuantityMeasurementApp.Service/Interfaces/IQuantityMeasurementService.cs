@@ -1,4 +1,5 @@
 using QuantityMeasurementApp.Model.DTO;
+using QuantityMeasurementApp.Model.Entity;
 
 namespace QuantityMeasurementApp.Service
 {
@@ -13,5 +14,7 @@ namespace QuantityMeasurementApp.Service
     QuantityDTO Subtract(QuantityDTO q1, QuantityDTO q2);
 
     double Divide(QuantityDTO q1, QuantityDTO q2);
+
+    List<QuantityMeasurementEntity> GetAllMeasurements();
   }
 }
