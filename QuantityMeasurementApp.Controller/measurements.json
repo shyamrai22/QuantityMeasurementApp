@@ -7,7 +7,7 @@
     "MeasurementType": "Length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372392Z"
+    "CreatedAt": "2026-03-23T11:51:39.3982654Z"
   },
   {
     "Operation": "CONVERT",
@@ -17,7 +17,7 @@
     "MeasurementType": "Length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372495Z"
+    "CreatedAt": "2026-03-23T11:51:39.3982824Z"
   },
   {
     "Operation": "SUBTRACT",
@@ -27,7 +27,7 @@
     "MeasurementType": "Length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372547Z"
+    "CreatedAt": "2026-03-23T11:51:39.3982912Z"
   },
   {
     "Operation": "CONVERT",
@@ -37,7 +37,7 @@
     "MeasurementType": "Distance",
     "HasError": true,
     "ErrorMessage": "Unsupported measurement type",
-    "CreatedAt": "2026-03-20T06:25:03.7372611Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983007Z"
   },
   {
     "Operation": "CONVERT",
@@ -47,7 +47,7 @@
     "MeasurementType": "Distance",
     "HasError": true,
     "ErrorMessage": "Unsupported measurement type",
-    "CreatedAt": "2026-03-20T06:25:03.7372677Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983141Z"
   },
   {
     "Operation": "CONVERT",
@@ -57,7 +57,7 @@
     "MeasurementType": "Length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372708Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983203Z"
   },
   {
     "Operation": "COMPARE",
@@ -67,7 +67,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372759Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983248Z"
   },
   {
     "Operation": "COMPARE",
@@ -77,7 +77,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372781Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983291Z"
   },
   {
     "Operation": "SUBTRACT",
@@ -87,7 +87,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372802Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983331Z"
   },
   {
     "Operation": "COMPARE",
@@ -97,7 +97,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372826Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983372Z"
   },
   {
     "Operation": "CONVERT",
@@ -107,7 +107,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372855Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983423Z"
   },
   {
     "Operation": "CONVERT",
@@ -117,7 +117,7 @@
     "MeasurementType": "distance",
     "HasError": true,
     "ErrorMessage": "Unsupported measurement type",
-    "CreatedAt": "2026-03-20T06:25:03.7372878Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983464Z"
   },
   {
     "Operation": "ADD",
@@ -127,7 +127,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372899Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983504Z"
   },
   {
     "Operation": "ADD",
@@ -137,7 +137,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372922Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983544Z"
   },
   {
     "Operation": "CONVERT",
@@ -147,7 +147,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372952Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983603Z"
   },
   {
     "Operation": "CONVERT",
@@ -157,7 +157,7 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7372973Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983644Z"
   },
   {
     "Operation": "COMPARE",
@@ -167,7 +167,7 @@
     "MeasurementType": "distance",
     "HasError": true,
     "ErrorMessage": "Unsupported measurement type",
-    "CreatedAt": "2026-03-20T06:25:03.7373042Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983686Z"
   },
   {
     "Operation": "CONVERT",
@@ -177,6 +177,216 @@
     "MeasurementType": "length",
     "HasError": false,
     "ErrorMessage": "",
-    "CreatedAt": "2026-03-20T06:25:03.7373071Z"
+    "CreatedAt": "2026-03-23T11:51:39.3983726Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3983839Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 FEET",
+    "Operand2": "24 INCH",
+    "Result": "True",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3983889Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 FEET",
+    "Operand2": "",
+    "Result": "396 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3983929Z"
+  },
+  {
+    "Operation": "SUBTRACT",
+    "Operand1": "33 INCH",
+    "Operand2": "2 FEET",
+    "Result": "9 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984034Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "Distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-23T11:51:39.398412Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 FEET",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "Distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-23T11:51:39.3984165Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 FEET",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "Length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984242Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "1 feet",
+    "Operand2": "12 feet",
+    "Result": "False",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984287Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "False",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984354Z"
+  },
+  {
+    "Operation": "SUBTRACT",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "1 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984404Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "24 inch",
+    "Result": "True",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984456Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.398456Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "",
+    "MeasurementType": "distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-23T11:51:39.3984624Z"
+  },
+  {
+    "Operation": "ADD",
+    "Operand1": "2 feet",
+    "Operand2": "12 inch",
+    "Result": "3 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984674Z"
+  },
+  {
+    "Operation": "ADD",
+    "Operand1": "2 feet",
+    "Operand2": "3 inch",
+    "Result": "2.25 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984716Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984762Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "22 inch",
+    "Operand2": "",
+    "Result": "1.8333333333333333 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984804Z"
+  },
+  {
+    "Operation": "COMPARE",
+    "Operand1": "2 feet",
+    "Operand2": "22 inch",
+    "Result": "",
+    "MeasurementType": "distance",
+    "HasError": true,
+    "ErrorMessage": "Unsupported measurement type",
+    "CreatedAt": "2026-03-23T11:51:39.3984846Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "33 feet",
+    "Operand2": "",
+    "Result": "396 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.398489Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "2 feet",
+    "Operand2": "",
+    "Result": "24 INCH",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.398493Z"
+  },
+  {
+    "Operation": "CONVERT",
+    "Operand1": "44 inch",
+    "Operand2": "",
+    "Result": "3.6666666666666665 FEET",
+    "MeasurementType": "length",
+    "HasError": false,
+    "ErrorMessage": "",
+    "CreatedAt": "2026-03-23T11:51:39.3984978Z"
   }
 ]
