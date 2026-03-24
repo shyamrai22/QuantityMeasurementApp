@@ -1,69 +1,66 @@
 ﻿using QuantityMeasurementApp.Library.Model;
 using QuantityMeasurementApp.Model.DTO;
 using QuantityMeasurementApp.Model.Entity;
-using QuantityMeasurementApp.Repository;
+using QuantityMeasurementApp.Repository.Data;
 
 namespace QuantityMeasurementApp.Service
 {
   public class QuantityMeasurementServiceImpl : IQuantityMeasurementService
   {
-    private readonly IQuantityMeasurementRepository databaseRepository;
-    private readonly QuantityMeasurementCacheRepository cacheRepository;
+    private readonly AppDbContext context;
 
-    public QuantityMeasurementServiceImpl(
-        IQuantityMeasurementRepository databaseRepository,
-        QuantityMeasurementCacheRepository cacheRepository)
+    public QuantityMeasurementServiceImpl(AppDbContext context)
     {
-      this.databaseRepository = databaseRepository;
-      this.cacheRepository = cacheRepository;
+      this.context = context;
     }
 
-    // Helper Methods
-    public List<QuantityMeasurementEntity> GetAllMeasurements()
+    // ===================== GET =====================
+
+    public List<QuantityMeasurementEntity> GetAll()
     {
-      var cacheData = cacheRepository.GetAll();
-
-      if (cacheData.Count > 0)
-      {
-        Console.WriteLine("⚡ Serving from CACHE");
-        return cacheData;
-      }
-
-      Console.WriteLine("📦 Fetching from DATABASE");
-
-      var dbData = databaseRepository.GetAll();
-
-      foreach (var item in dbData)
-      {
-        cacheRepository.Save(item);
-      }
-
-      return dbData;
+      return context.Measurements.ToList();
     }
+
+    // ===================== HELPERS =====================
 
     private void SaveSuccess(string operation, string op1, string op2, string result, string type)
     {
-      databaseRepository.Save(new QuantityMeasurementEntity(
-          operation, op1, op2, result, type
-      ));
+      context.Measurements.Add(new QuantityMeasurementEntity
+      {
+        Operation = operation,
+        Operand1 = op1,
+        Operand2 = op2,
+        Result = result,
+        MeasurementType = type,
+        HasError = false
+      });
 
-      cacheRepository.ClearCache();
+      context.SaveChanges();
     }
 
     private void SaveError(string operation, string op1, string op2, string type, string error)
     {
-      databaseRepository.Save(new QuantityMeasurementEntity(
-          operation, op1, op2, null, type, true, error
-      ));
+      context.Measurements.Add(new QuantityMeasurementEntity
+      {
+        Operation = operation,
+        Operand1 = op1,
+        Operand2 = op2,
+        Result = null,
+        MeasurementType = type,
+        HasError = true,
+        ErrorMessage = error
+      });
 
-      cacheRepository.ClearCache();
+      context.SaveChanges();
     }
+
+    // ===================== OPERATIONS =====================
 
     public bool Compare(QuantityDTO firstQuantityDto, QuantityDTO secondQuantityDto)
     {
       try
       {
-        bool operationResult = firstQuantityDto.MeasurementType.ToLower() switch
+        bool result = firstQuantityDto.MeasurementType.ToLower() switch
         {
           "length" => new Quantity<LengthUnit>(firstQuantityDto.Value, Enum.Parse<LengthUnit>(firstQuantityDto.Unit, true))
                         .Equals(new Quantity<LengthUnit>(secondQuantityDto.Value, Enum.Parse<LengthUnit>(secondQuantityDto.Unit, true))),
@@ -81,23 +78,23 @@ namespace QuantityMeasurementApp.Service
         };
 
         SaveSuccess(
-            "COMPARE",
-            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-            operationResult.ToString(),
-            firstQuantityDto.MeasurementType
+          "COMPARE",
+          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+          result.ToString(),
+          firstQuantityDto.MeasurementType
         );
 
-        return operationResult;
+        return result;
       }
       catch (Exception ex)
       {
         SaveError(
-            "COMPARE",
-            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
-            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
-            firstQuantityDto?.MeasurementType,
-            ex.Message
+          "COMPARE",
+          $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+          $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+          firstQuantityDto?.MeasurementType,
+          ex.Message
         );
         throw;
       }
@@ -127,17 +124,17 @@ namespace QuantityMeasurementApp.Service
         dynamic resultQuantity = conversionResult;
 
         var resultDto = new QuantityDTO(
-            resultQuantity.Value,
-            resultQuantity.Unit.ToString(),
-            sourceQuantityDto.MeasurementType
+          resultQuantity.Value,
+          resultQuantity.Unit.ToString(),
+          sourceQuantityDto.MeasurementType
         );
 
         SaveSuccess(
-            "CONVERT",
-            $"{sourceQuantityDto.Value} {sourceQuantityDto.Unit}",
-            null,
-            $"{resultDto.Value} {resultDto.Unit}",
-            sourceQuantityDto.MeasurementType
+          "CONVERT",
+          $"{sourceQuantityDto.Value} {sourceQuantityDto.Unit}",
+          null,
+          $"{resultDto.Value} {resultDto.Unit}",
+          sourceQuantityDto.MeasurementType
         );
 
         return resultDto;
@@ -145,11 +142,11 @@ namespace QuantityMeasurementApp.Service
       catch (Exception ex)
       {
         SaveError(
-            "CONVERT",
-            $"{sourceQuantityDto?.Value} {sourceQuantityDto?.Unit}",
-            null,
-            sourceQuantityDto?.MeasurementType,
-            ex.Message
+          "CONVERT",
+          $"{sourceQuantityDto?.Value} {sourceQuantityDto?.Unit}",
+          null,
+          sourceQuantityDto?.MeasurementType,
+          ex.Message
         );
         throw;
       }
@@ -178,17 +175,17 @@ namespace QuantityMeasurementApp.Service
         dynamic resultQuantity = additionResult;
 
         var resultDto = new QuantityDTO(
-            resultQuantity.Value,
-            resultQuantity.Unit.ToString(),
-            firstQuantityDto.MeasurementType
+          resultQuantity.Value,
+          resultQuantity.Unit.ToString(),
+          firstQuantityDto.MeasurementType
         );
 
         SaveSuccess(
-            "ADD",
-            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-            $"{resultDto.Value} {resultDto.Unit}",
-            firstQuantityDto.MeasurementType
+          "ADD",
+          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+          $"{resultDto.Value} {resultDto.Unit}",
+          firstQuantityDto.MeasurementType
         );
 
         return resultDto;
@@ -196,11 +193,11 @@ namespace QuantityMeasurementApp.Service
       catch (Exception ex)
       {
         SaveError(
-            "ADD",
-            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
-            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
-            firstQuantityDto?.MeasurementType,
-            ex.Message
+          "ADD",
+          $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+          $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+          firstQuantityDto?.MeasurementType,
+          ex.Message
         );
         throw;
       }
@@ -229,17 +226,17 @@ namespace QuantityMeasurementApp.Service
         dynamic resultQuantity = subtractionResult;
 
         var resultDto = new QuantityDTO(
-            resultQuantity.Value,
-            resultQuantity.Unit.ToString(),
-            firstQuantityDto.MeasurementType
+          resultQuantity.Value,
+          resultQuantity.Unit.ToString(),
+          firstQuantityDto.MeasurementType
         );
 
         SaveSuccess(
-            "SUBTRACT",
-            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-            $"{resultDto.Value} {resultDto.Unit}",
-            firstQuantityDto.MeasurementType
+          "SUBTRACT",
+          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+          $"{resultDto.Value} {resultDto.Unit}",
+          firstQuantityDto.MeasurementType
         );
 
         return resultDto;
@@ -247,11 +244,11 @@ namespace QuantityMeasurementApp.Service
       catch (Exception ex)
       {
         SaveError(
-            "SUBTRACT",
-            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
-            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
-            firstQuantityDto?.MeasurementType,
-            ex.Message
+          "SUBTRACT",
+          $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+          $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+          firstQuantityDto?.MeasurementType,
+          ex.Message
         );
         throw;
       }
@@ -278,11 +275,11 @@ namespace QuantityMeasurementApp.Service
         };
 
         SaveSuccess(
-            "DIVIDE",
-            $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
-            $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
-            result.ToString(),
-            firstQuantityDto.MeasurementType
+          "DIVIDE",
+          $"{firstQuantityDto.Value} {firstQuantityDto.Unit}",
+          $"{secondQuantityDto.Value} {secondQuantityDto.Unit}",
+          result.ToString(),
+          firstQuantityDto.MeasurementType
         );
 
         return result;
@@ -290,11 +287,11 @@ namespace QuantityMeasurementApp.Service
       catch (Exception ex)
       {
         SaveError(
-            "DIVIDE",
-            $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
-            $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
-            firstQuantityDto?.MeasurementType,
-            ex.Message
+          "DIVIDE",
+          $"{firstQuantityDto?.Value} {firstQuantityDto?.Unit}",
+          $"{secondQuantityDto?.Value} {secondQuantityDto?.Unit}",
+          firstQuantityDto?.MeasurementType,
+          ex.Message
         );
         throw;
       }

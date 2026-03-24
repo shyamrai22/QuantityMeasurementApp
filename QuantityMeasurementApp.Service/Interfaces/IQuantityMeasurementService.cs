@@ -15,6 +15,6 @@ namespace QuantityMeasurementApp.Service
 
     double Divide(QuantityDTO q1, QuantityDTO q2);
 
-    List<QuantityMeasurementEntity> GetAllMeasurements();
+    List<QuantityMeasurementEntity> GetAll();
   }
 }

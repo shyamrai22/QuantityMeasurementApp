@@ -1,33 +1,38 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace QuantityMeasurementApp.Model.Entity
 {
   public class QuantityMeasurementEntity
   {
-    public string Operation { get; }
-    public string? Operand1 { get; }
-    public string? Operand2 { get; }
-    public string? Result { get; }
-    public string MeasurementType { get; }
-    public bool HasError { get; }
-    public string? ErrorMessage { get; }
-    public DateTime CreatedAt { get; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
 
-    public QuantityMeasurementEntity(
-        string operation,
-        string? operand1,
-        string? operand2,
-        string? result,
-        string measurementType,
-        bool hasError = false,
-        string? errorMessage = null)
-    {
-      Operation = operation;
-      Operand1 = operand1;
-      Operand2 = operand2;
-      Result = result;
-      MeasurementType = measurementType;
-      HasError = hasError;
-      ErrorMessage = errorMessage;
-      CreatedAt = DateTime.UtcNow;
-    }
+    [Required]
+    [MaxLength(50)]
+    public string Operation { get; set; }
+
+    [MaxLength(100)]
+    public string? Operand1 { get; set; }
+
+    [MaxLength(100)]
+    public string? Operand2 { get; set; }
+
+    [MaxLength(100)]
+    public string? Result { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string MeasurementType { get; set; }
+
+    [Required]
+    public bool HasError { get; set; }
+
+    [MaxLength(255)]
+    public string? ErrorMessage { get; set; }
+
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
   }
 }
