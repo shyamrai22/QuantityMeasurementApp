@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuantityMeasurementApp.Model.DTO;
 using QuantityMeasurementApp.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuantityMeasurementApp.Controller.Controllers
 {
@@ -77,6 +78,7 @@ namespace QuantityMeasurementApp.Controller.Controllers
 
     // ===================== GET RECORDS =====================
 
+    [Authorize]
     [HttpGet("records")]
     public IActionResult GetAll()
     {

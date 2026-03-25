@@ -9,5 +9,6 @@ namespace QuantityMeasurementApp.Repository.Data
         : base(options) { }
 
     public DbSet<QuantityMeasurementEntity> Measurements { get; set; }
+    public DbSet<User> Users { get; set; }
   }
 }
