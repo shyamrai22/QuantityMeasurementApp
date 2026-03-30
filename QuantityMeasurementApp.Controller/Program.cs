@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Quantity API", Version = "v1" });
 
-    // 🔐 JWT Authentication Setup
+    // JWT Authentication Setup
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
