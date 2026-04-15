@@ -63,6 +63,7 @@ A robust, multi-layered .NET Core Web API designed for unit measurement, convers
     ```bash
     dotnet run --project QuantityMeasurementApp.Controller
     ```
+    Once the app starts, navigate to the base URL (e.g., `http://localhost:5000`) to see the **Swagger UI** directly.
 
 ## 🔌 API Endpoints
 
